@@ -1,15 +1,17 @@
 FROM    osrm/osrm-backend
 MAINTAINER  Alexander Sergeychik <alexander@isolutions.by>
 
-ARG     mapRef=europe/belarus-latest
-ARG     mapType=osm.pbf
+ARG     profile=car
+ARG     map=map
 
 RUN     mkdir /maps
-ADD     http://download.geofabrik.de/$mapRef.$mapType /maps/map.$mapType
 
-RUN     osrm-extract -p /opt/car.lua "/maps/map.$mapType"
-RUN     osrm-contract /maps/map.osrm
+COPY    ./$map.osm.pbf /maps/$map.osm.pbf
 
-CMD     osrm-routed /maps/map.osrm
+# http://download.geofabrik.de/europe/belarus-latest.osm.pbf
+
+RUN     osrm-extract -p "/opt/$profile.lua" "/maps/$map.osm.pbf"
+RUN     osrm-contract /maps/$map.osrm
+CMD     osrm-routed /maps/$map.osrm
 
 EXPOSE 5000
