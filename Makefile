@@ -1,11 +1,13 @@
 
-MAPNAME=belarus-latest
+MAP_NAME=belarus-latest
+DOCKER_IMAGE=docker.isolutions.by/osrm/belarus:latest
+
 
 all: download build
 
 
 download:
-	wget --progress=dot -O $(MAPNAME).osm.pbf http://download.geofabrik.de/europe/$(MAPNAME).osm.pbf
+	wget --progress=dot -O $(MAP_NAME).osm.pbf http://download.geofabrik.de/europe/$(MAP_NAME).osm.pbf
 
 build:
-	docker build --pull --build-arg map=$(MAPNAME) .
+	docker build -t $(DOCKER_IMAGE) --pull --build-arg map=$(MAP_NAME) .

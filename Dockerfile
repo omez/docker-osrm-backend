@@ -1,4 +1,5 @@
-FROM    osrm/osrm-backend
+## Backend build
+FROM    osrm/osrm-backend AS backend_build
 MAINTAINER  Alexander Sergeychik <alexander@isolutions.by>
 
 ARG     profile=car
@@ -13,6 +14,15 @@ RUN     osrm-extract -p "/opt/$profile.lua" "/maps/map.osm.pbf"
 RUN     osrm-contract /maps/map.osrm
 RUN     rm /maps/map.osrm.pbf
 
+CMD     /bin/bash
+
+## Backed runner
+FROM    osrm/osrm-backend AS runner
+
+RUN     mkdir /maps
+COPY    --from=build /maps/* /maps/
+
 CMD     osrm-routed /maps/map.osrm
 
 EXPOSE 5000
+
