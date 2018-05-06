@@ -21,7 +21,7 @@ FROM    osrm/osrm-backend AS runner
 MAINTAINER  Alexander Sergeychik <alexander@isolutions.by>
 
 RUN     mkdir /maps
-COPY    --from=backend_build /maps/* /maps/
+COPY    --from=0 /maps/* /maps/
 CMD     osrm-routed /maps/map.osrm
 
 EXPOSE 5000
